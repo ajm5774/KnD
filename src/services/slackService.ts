@@ -1,5 +1,5 @@
 import { RequestBuilder, RequestMaker } from './requestMaker';
-import config from '../../config';
+import config from '../config';
 
 const SLACK_TOKEN = config.slackToken;
 const slackChatUrl = `https://slack.com/api/chat.postMessage?token=${SLACK_TOKEN}`;

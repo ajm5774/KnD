@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-import config from '../../config';
+import config from '../config';
 const url = config.mongoDB;
 
 const dbName = 'karmabot';
