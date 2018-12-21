@@ -1,0 +1,31 @@
+{
+  "name": "karma-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "lodash": "^4.17.4",
+    "mongodb": "^3.1.10",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "ws": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/express": "^4.16.0",
+    "@types/lodash": "^4.14.119",
+    "@types/node": "^10.12.18",
+    "@types/request": "^2.48.1",
+    "@types/request-promise": "^4.1.42",
+    "@types/ws": "^6.0.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "start": "node dist/src/app.js",
+    "build": "tsc --sourceMap"
+  }
+}
