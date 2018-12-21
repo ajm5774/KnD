@@ -14,9 +14,6 @@ export default class SlackService {
       requestBuilder.qs({ text });
     }
 
-    console.log('replying slack');
-    console.log(requestBuilder.get())
-
     return RequestMaker.http(requestBuilder.get());
   }
 
