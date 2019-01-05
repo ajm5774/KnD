@@ -10,7 +10,9 @@ const config = <any>{
         mongo: {
             connectionString: process.env.MONGO_CONNECTION_STRING,
         },
-        slack: {},
+        slack: {
+            connectionToken: process.env.SLACK_TOKEN
+        },
     },
 };
 let env = <string>process.env.NODE_ENV;

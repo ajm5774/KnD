@@ -4,5 +4,5 @@
     "watch": ["src"],
     "ext": "ts",
     "ignore": ["src/**/*.spec.ts"],
-    "exec": "npx ts-node"
+    "exec": "yarn dev"
 }

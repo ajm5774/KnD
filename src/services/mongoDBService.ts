@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 import config from '../config';
-const url = config.mongoDB;
+const url = config.mongo.connectionString;
 
 const dbName = 'karmabot';
 const collectionName = 'karma';
@@ -33,7 +33,7 @@ export default class MongoDBService {
 
   static async find(query: any): Promise<user> {
     const dbo = await this.connect();
-    return new Promise((resolve, reject) => {
+    return new Promise<user>((resolve, reject) => {
       dbo.findOne(query, (err: any, document: user) => {
         if (err) {
           console.log(err);
