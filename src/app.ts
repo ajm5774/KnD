@@ -3,11 +3,14 @@ require('dotenv').config();
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as WebSocket from 'ws';
-import * as _ from 'lodash';
 
 //My Services
 import SlackService from './services/slackService'
-import MongoService from './services/mongoDBService';
+
+//Commands
+import Command from './commands/command';
+import CommandAddKarma from './commands/commandAddKarma';
+import CommandSubtractKarma from './commands/commandSubtractKarma';
 
 let ws;
 let app = express();
@@ -23,58 +26,31 @@ app.listen(port, () => {
   console.log('Listening on port ' + port);
 });
 
+
+function getCommands(event: any): Command[] {
+  const eventTypeToCommands: { [id: string] : any[] } = {
+    'message': [CommandAddKarma, CommandSubtractKarma],
+  };
+
+  if (event.type in eventTypeToCommands) {
+    return eventTypeToCommands[event.type].map(cls => new cls(event));
+  }
+
+  return [];
+}
+
 async function launchWebSocket() {
   const url = await SlackService.getConnectionUrl();
   ws = new WebSocket(url);
   ws.on('message', (res: any) => {
     const event = JSON.parse(res);
-    const msg = event.text;
-    const channel = event.channel;
-    commandCheck(msg, channel);
+
+    if(event.bot_id) {
+      return; // Lets not try parsing messages from bots
+    }
+
+    getCommands(event).forEach(cmd => cmd.process());
   });
-}
-
-function commandCheck(msg: string, channel: string) {
-  let regex = /\s*(\S+)\+\+(\s|$)/;
-  let match = regex.exec(msg);
-
-  if (match) {
-    const user = match[1];
-    updateKarma(user, channel, true);
-    return;
-  }
-
-  regex = /\s*(\S+)--(\s|$)/;
-  match = regex.exec(msg);
-
-  if (match) {
-    const user = match[1];
-    updateKarma(user, channel);
-    return;
-  }
-}
-
-async function updateKarma(user: string, channel: string, isAdd?: boolean) {
-  const query = { recipient: user };
-  let totalKarma;
-  const userDocument = await MongoService.find(query);
-
-  if (userDocument) {
-    totalKarma = userDocument.karma;
-    totalKarma = isAdd ? ++totalKarma : --totalKarma;
-    MongoService.update(query, { karma: totalKarma });
-  } else {
-    totalKarma = isAdd ? 1 : -1;
-    MongoService.insertMany([
-      {
-        recipient: user,
-        karma: totalKarma
-      }
-    ]);
-  }
-
-  const reply = `${user} has ${totalKarma} karma!`;
-  SlackService.reply(reply, channel);
 }
 
 launchWebSocket();
