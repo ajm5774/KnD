@@ -19,19 +19,12 @@ export default class SlackService {
   }
 
   static async getUsers(): Promise<any[]> {
-     const resp = await SlackService.getJsonResponse('GET', slackUsersUrl);
-     return resp.members;
+    const resp = await RequestMaker.getJsonResponse('GET', slackUsersUrl);
+    return resp.members;
   }
 
-  static async getConnectionUrl(): Promise<string> {
-    const resp = await SlackService.getJsonResponse('POST', slackRTMUrl);
+  static async getRtmUrl(): Promise<string> {
+    const resp = await RequestMaker.getJsonResponse('POST', slackRTMUrl);
     return resp.url;
-  }
-
-  static async getJsonResponse(method: string, url: string) {
-    const requestBuilder = new RequestBuilder(method, url);
-    const resp = await RequestMaker.http(requestBuilder.get());
-    const response = JSON.parse(resp);
-    return response;
   }
 }

@@ -5,9 +5,16 @@ export class RequestMaker {
     try {
       const resp = await requestPromise(requestObj);
       return resp;
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
+  }
+
+  static async getJsonResponse(method: string, url: string) {
+    const requestBuilder = new RequestBuilder(method, url);
+    const resp = await RequestMaker.http(requestBuilder.get());
+    const response = JSON.parse(resp);
+    return response;
   }
 }
 
