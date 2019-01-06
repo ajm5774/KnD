@@ -1,11 +1,13 @@
+require('dotenv').config();
+
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as WebSocket from 'ws';
 import * as _ from 'lodash';
-import MongoService from './services/mongoDBService';
 
 //My Services
-import SlackService from './services/slackService.js'
+import SlackService from './services/slackService'
+import MongoService from './services/mongoDBService';
 
 let ws;
 let app = express();
