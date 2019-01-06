@@ -1,0 +1,8 @@
+{
+    "name": "dev",
+    "homepage": "http://localhost:1337",
+    "watch": ["src"],
+    "ext": "ts",
+    "ignore": ["src/**/*.spec.ts"],
+    "exec": "npx ts-node"
+}
