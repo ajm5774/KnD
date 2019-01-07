@@ -4,6 +4,7 @@ import config from '../config';
 const SLACK_TOKEN = config.slack.connectionToken;
 const slackChatUrl = `https://slack.com/api/chat.postMessage?token=${SLACK_TOKEN}`;
 const slackRTMUrl = `https://slack.com/api/rtm.connect?token=${SLACK_TOKEN}`;
+const slackUsersUrl = `https://slack.com/api/users.list?token=${SLACK_TOKEN}`;
 
 export default class SlackService {
   static reply(text: string, channel: string) {
@@ -17,10 +18,13 @@ export default class SlackService {
     return RequestMaker.http(requestBuilder.get());
   }
 
-  static async getConnectionUrl(): Promise<string> {
-    const requestBuilder = new RequestBuilder('POST', slackRTMUrl);
-    const resp = await RequestMaker.http(requestBuilder.get());
-    const response = JSON.parse(resp);
-    return response.url;
+  static async getUsers(): Promise<any[]> {
+    const resp = await RequestMaker.getJsonResponse('GET', slackUsersUrl);
+    return resp.members;
+  }
+
+  static async getRtmUrl(): Promise<string> {
+    const resp = await RequestMaker.getJsonResponse('POST', slackRTMUrl);
+    return resp.url;
   }
 }
