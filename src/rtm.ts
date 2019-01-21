@@ -31,12 +31,16 @@ export async function start() {
   const url = await SlackService.getRtmUrl();
   const ws = new WebSocket(url);
   ws.on('message', (res: string) => {
-    const event = JSON.parse(res);
+    try {
+      const event = JSON.parse(res);
 
-    if (event.bot_id) {
-      return; // Lets not try parsing messages from bots
+      if (event.bot_id) {
+        return; // Lets not try parsing messages from bots
+      }
+
+      getCommands(event).forEach(cmd => cmd.process());
+    } catch (e) {
+      console.log(e);
     }
-
-    getCommands(event).forEach(cmd => cmd.process());
   });
 }
