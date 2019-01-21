@@ -3,14 +3,10 @@ import db from '../db';
 import { prop, Typegoose, staticMethod, ModelType } from 'typegoose';
 
 export class User extends Typegoose {
-  @prop({
-    required: true
-  })
+  @prop({ required: true })
   id!: string;
 
-  @prop({
-    default: 0
-  })
+  @prop({ default: 0 })
   karma!: number;
 
   @staticMethod
