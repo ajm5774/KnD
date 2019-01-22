@@ -12,11 +12,15 @@ import SlackService from './services/slackService'
 
 //Commands
 import Command from './commands/command';
-import CommandAddKarma from './commands/commandAddKarma';
-import CommandSubtractKarma from './commands/commandSubtractKarma';
+import CommandAddKarmaMessage from './commands/commandAddKarmaMessage';
+import CommandSubtractKarmaMessage from './commands/commandSubtractKarmaMessage';
+
+import CommandAddKarmaReaction from './commands/commandAddKarmaReaction';
+import CommandSubtractKarmaReaction from './commands/commandSubtractKarmaReaction';
 
 const eventTypeToCommands: { [id: string]: any[] } = {
-  'message': [CommandAddKarma, CommandSubtractKarma],
+  'message': [CommandAddKarmaMessage, CommandSubtractKarmaMessage],
+  'reaction_added': [CommandAddKarmaReaction, CommandSubtractKarmaReaction],
 };
 
 function getCommands(event: any): Command[] {

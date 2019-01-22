@@ -5,7 +5,7 @@ export default abstract class Command {
     this.event = event
   }
 
-  protected abstract async doProcess(): Promise<void>;
+  public abstract async doProcess(): Promise<void>;
 
   protected abstract async canProcess(): Promise<boolean>;
 
