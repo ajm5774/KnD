@@ -5,7 +5,7 @@ import Command from './command';
 import SlackService from '../services/slackService';
 import { UserModel, User } from '../db/models/user';
 
-export default class CommandAddKarma extends Command {
+export default class CommandAddKarmaMessage extends Command {
   protected userIdTarget: string;
   protected userIdSource: string;
   protected inputUserTarget: string;
@@ -57,9 +57,7 @@ export default class CommandAddKarma extends Command {
 
     // Try to match the target with a user to get their id, but otherwise just return the userTarget 
     // as the id
-    const userTargetLower = inputUserTarget.toLowerCase();
-    const users = await SlackService.getUsers();
-    const user = _.find(users, (u) => u.name.toLowerCase() === userTargetLower)
+    const user = await SlackService.getUserByName(inputUserTarget);
     return user ? user.id : inputUserTarget;
   }
 

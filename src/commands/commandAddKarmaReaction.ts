@@ -17,15 +17,9 @@ export default class CommandAddKarmaReaction extends CommandAddKarmaMessage {
     if (this.allowedReactions.includes(this.reaction) && this.event.item_user) {
       this.userIdTarget = this.event.item_user;
       this.userIdSource = this.event.user;
-      this.inputUserTarget = await this.getUserName(this.userIdTarget);
+      this.inputUserTarget = await SlackService.getUserName(this.userIdTarget);
       return true;
     }
     return false;
-  }
-
-  protected async getUserName(userId: string): Promise<string> {
-    const users = await SlackService.getUsers();
-    const user = _.find(users, (u) => u.id === userId)
-    return user.name;
   }
 }
