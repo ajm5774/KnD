@@ -1,4 +1,5 @@
 import * as requestPromise from 'request-promise';
+import logger from '../logger';
 
 export class RequestMaker {
   static async http(requestObj: payload) {
@@ -6,7 +7,7 @@ export class RequestMaker {
       const resp = await requestPromise(requestObj);
       return resp;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 

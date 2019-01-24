@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import logger from '../logger';
 import Command from './command';
 import SlackService from '../services/slackService';
 import { UserModel, User } from '../db/models/user';
@@ -35,7 +36,7 @@ export default class CommandAddKarmaMessage extends Command {
   }
 
   public async doProcess(): Promise<void> {
-    console.log(`${this.userIdSource} giving karma to ${this.userIdTarget}`)
+    logger.info(`${this.userIdSource} giving karma to ${this.userIdTarget}`)
     let totalKarma;
     let karmaUpdatedMessage;
     if (this.userIdTarget === this.userIdSource) {
