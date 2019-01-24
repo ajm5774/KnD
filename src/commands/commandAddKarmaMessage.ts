@@ -1,5 +1,3 @@
-
-
 import * as _ from 'lodash';
 import Command from './command';
 import SlackService from '../services/slackService';
@@ -15,8 +13,11 @@ export default class CommandAddKarmaMessage extends Command {
   public constructor(event: any) {
     super(event);
 
-    this.channel = this.event.channel;
+    // Matches against user messages
+    // ex. "   ELONgatedMUSKrat27 ++ ", "Bizzle++"
     this.regex = /\s*(\S+)\s?\+\+(\s|$)/;
+
+    this.channel = this.event.channel;
     this.inputUserTarget = ''
     this.userIdTarget = '';
     this.userIdSource = '';

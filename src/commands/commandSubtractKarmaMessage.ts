@@ -5,6 +5,8 @@ export default class CommandSubtractKarmaMessage extends CommandAddKarma {
   public constructor(event: any) {
     super(event);
 
+    // Matches against user messages
+    // ex. "   #lord*swaggins# -- ", "420_Ch4dBr0Ch!11_69--"
     this.regex = /\s*(\S+)\s?--(\s|$)/;
   }
 
