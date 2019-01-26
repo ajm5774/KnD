@@ -10,8 +10,7 @@ Commands
 1. Setup MongoDB
     * Download and install [Mongodb](https://www.mongodb.com/download-center/community)
     * Add bin folder to the path (ex. C:\Program Files\MongoDB\Server\4.0\bin)
-    * Open a terminal and run mongo cli with `mongo`. Create database with `use kad`
-    * Add the connection string to .env file with `MONGO_CONNECTION_STRING=mongodb://localhost/kad`
+    * Add the connection string to .env file with `MONGO_CONNECTION_STRING=mongodb://localhost`
 1. Setup Slack
     * Request permissions to be added to [dev workspace](https://karmaanddragons.slack.com). This will add you as a collaborator for the [slack app](https://api.slack.com/apps/AF6MPM22U)
     * Add the bot access token to .env file with `SLACK_TOKEN=<bot_access_token>`. The access token can be found under **Features > OAuth & Permissions**
