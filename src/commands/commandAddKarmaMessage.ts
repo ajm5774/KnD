@@ -1,63 +1,66 @@
-
-
 import * as _ from 'lodash';
+import logger from '../logger';
 import Command from './command';
 import SlackService from '../services/slackService';
 import { UserModel, User } from '../db/models/user';
 
-export default class CommandAddKarma extends Command {
-  protected userTarget: string;
+export default class CommandAddKarmaMessage extends Command {
+  protected userIdTarget: string;
+  protected userIdSource: string;
+  protected inputUserTarget: string;
   protected channel: string;
   protected regex: RegExp;
 
   public constructor(event: any) {
     super(event);
 
-    this.channel = this.event.channel;
+    // Matches against user messages
+    // ex. "   ELONgatedMUSKrat27 ++ ", "Bizzle++"
     this.regex = /\s*(\S+)\s?\+\+(\s|$)/;
-    this.userTarget = '';
+
+    this.channel = this.event.channel;
+    this.inputUserTarget = ''
+    this.userIdTarget = '';
+    this.userIdSource = '';
   }
 
   protected async canProcess(): Promise<boolean> {
     let match = this.regex.exec(this.event.text);
     if (match) {
-      this.userTarget = match[1];
+      this.inputUserTarget = match[1];
+      this.userIdTarget = await this.getUserIdTarget(this.inputUserTarget);
+      this.userIdSource = this.event.user;
       return true;
     }
     return false;
   }
 
-  protected async doProcess(): Promise<void> {
-    const userIdSource = this.event.user;
-    const userIdTarget = await this.getUserIdTarget();
-
-    console.log(`${userIdSource} giving karma to ${userIdTarget}`)
+  public async doProcess(): Promise<void> {
+    logger.info(`${this.userIdSource} giving karma to ${this.userIdTarget}`)
     let totalKarma;
     let karmaUpdatedMessage;
-    if (userIdTarget === userIdSource) {
-      totalKarma = await this.addKarma(userIdTarget, -1);
+    if (this.userIdTarget === this.userIdSource) {
+      totalKarma = await this.addKarma(this.userIdTarget, -1);
       karmaUpdatedMessage = `Cheater! ${this.getKarmaUpdatedMessage(totalKarma)}`;
     } else {
-      totalKarma = await this.addKarma(userIdTarget, 1);
+      totalKarma = await this.addKarma(this.userIdTarget, 1);
       karmaUpdatedMessage = this.getKarmaUpdatedMessage(totalKarma);
     }
     SlackService.reply(karmaUpdatedMessage, this.channel);
   }
 
-  protected async getUserIdTarget(): Promise<string> {
+  protected async getUserIdTarget(inputUserTarget: string): Promise<string> {
     // If the user looks like '<@UF6S35Y8G>', extract 'UF6S35Y8G' which is the user id.
     // This is the format when you call someone out with a command like '@user ++'
-    const match = /\<\@(\w*)\>/.exec(this.userTarget);
+    const match = /\<\@(\w*)\>/.exec(inputUserTarget);
     if (match) {
       return match[1];
     }
 
     // Try to match the target with a user to get their id, but otherwise just return the userTarget 
     // as the id
-    const userTargetLower = this.userTarget.toLowerCase();
-    const users = await SlackService.getUsers();
-    const user = _.find(users, (u) => u.name.toLowerCase() === userTargetLower)
-    return user ? user.id : this.userTarget;
+    const user = await SlackService.getUserByName(inputUserTarget);
+    return user ? user.id : inputUserTarget;
   }
 
   protected async findOrCreateUser(userId: string): Promise<User> {
@@ -84,6 +87,6 @@ export default class CommandAddKarma extends Command {
   }
 
   protected getKarmaUpdatedMessage(totalKarma: number): string {
-    return `${this.userTarget} has ${totalKarma} karma!`;
+    return `${this.inputUserTarget} has ${totalKarma} karma!`;
   }
 }

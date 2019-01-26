@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 import config from '../config';
 
 const url = `${config.mongo.connectionString}/karmabot`;
-mongoose.connect(url, { useNewUrlParser: true });
+mongoose.connect(url);
 
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;

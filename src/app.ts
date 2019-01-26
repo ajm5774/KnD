@@ -3,6 +3,7 @@ require('dotenv').config();
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as rtm from './rtm';
+import logger from './logger';
 
 
 let app = express();
@@ -15,7 +16,7 @@ app.get('/', (req, res) => {
 // Start the application after the database connection is ready
 let port = process.env.PORT || 1337;
 app.listen(port, () => {
-  console.log('Listening on port ' + port);
+  logger.info('Listening on port ' + port);
 });
 
 // Listen for real time messages

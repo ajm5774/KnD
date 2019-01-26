@@ -1,4 +1,3 @@
-
 import db from '../db';
 import { prop, Typegoose, staticMethod, ModelType } from 'typegoose';
 

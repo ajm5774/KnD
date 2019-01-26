@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { RequestBuilder, RequestMaker } from './requestMaker';
 import config from '../config';
 
@@ -21,6 +22,19 @@ export default class SlackService {
   static async getUsers(): Promise<any[]> {
     const resp = await RequestMaker.getJsonResponse('GET', slackUsersUrl);
     return resp.members;
+  }
+
+  static async getUserByName(userName: string): Promise<any> {
+    const userTargetLower = userName.toLowerCase();
+    const users = await SlackService.getUsers();
+    return _.find(users, (u) => u.real_name.toLowerCase() === userTargetLower)
+      || _.find(users, (u) => u.profile.display_name.toLowerCase() === userTargetLower);
+  }
+
+  static async getUserName(userId: string): Promise<string> {
+    const users = await SlackService.getUsers();
+    const user = _.find(users, (u) => u.id === userId)
+    return user.profile.display_name || user.real_name;
   }
 
   static async getRtmUrl(): Promise<string> {
